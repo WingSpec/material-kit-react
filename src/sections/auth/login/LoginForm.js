@@ -121,7 +121,7 @@ export default function LoginForm() {
           </Link>
         </Stack>
         
-        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', marginTop: '0px', marginBottom: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
+        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', mt: '0px', mb: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
         </FormHelperText>
         
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
