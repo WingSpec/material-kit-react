@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
+import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel, FormHelperText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -20,16 +20,54 @@ export default function LoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
+  async function handleLogin(values) {
+    const uriLogin = 'https://www.wingspect.net/api/account/login';
+    
+    const formdata = new FormData();
+    formdata.append('username', values.email);
+    formdata.append('password', values.password);
+
+    const requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    const fetchResponse = await fetch(uriLogin, requestOptions)
+      .catch(error => {
+        console.error(`Fetch response is:- ${error}`);
+      }
+    );
+    
+    const data = await fetchResponse.json()
+      .catch(error => {
+        console.error(`Fetch data Error is:- ${error}`);
+      }
+    );
+    
+    return data.response;    
+  }
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
       remember: true,
+      auth: false
     },
+    mapPropsToTouched: {auth: false},
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard/app', { replace: true });
-    },
+    onSubmit: async (values) => {
+      const result = await handleLogin(values);
+      console.log(result);
+      if (result === 'Error') {
+        errors.auth = true;
+      }
+      else {
+        values.auth = true; // unused for now
+        navigate('/dashboard/app', { replace: true });
+      }
+    }
   });
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -48,7 +86,7 @@ export default function LoginForm() {
             type="email"
             label="Email address"
             {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
+            error={Boolean(touched.email && errors.email || errors.auth)}
             helperText={touched.email && errors.email}
           />
 
@@ -67,7 +105,7 @@ export default function LoginForm() {
                 </InputAdornment>
               ),
             }}
-            error={Boolean(touched.password && errors.password)}
+            error={Boolean(touched.password && errors.password || errors.auth)}
             helperText={touched.password && errors.password}
           />
         </Stack>
@@ -82,7 +120,10 @@ export default function LoginForm() {
             Forgot password?
           </Link>
         </Stack>
-
+        
+        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', marginTop: '0px', marginBottom: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
+        </FormHelperText>
+        
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Login
         </LoadingButton>
