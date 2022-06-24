@@ -18,7 +18,7 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function Blog() {
+export default function BlogPage() {
   return (
     <Page title="Dashboard: Blog">
       <Container>

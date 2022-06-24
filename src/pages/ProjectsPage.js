@@ -9,7 +9,7 @@ import PRODUCTS from '../_mock/products';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceShop() {
+export default function ProjectsPage() {
   const [openFilter, setOpenFilter] = useState(false);
 
   const handleOpenFilter = () => {
