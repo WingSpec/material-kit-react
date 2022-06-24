@@ -19,7 +19,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const DashboardAppPage = lazy(() => import('./pages/DashboardAppPage'));
-const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 // import InspectionPage
 // import ReportPage(s?)
 
