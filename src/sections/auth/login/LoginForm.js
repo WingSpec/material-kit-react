@@ -52,7 +52,6 @@ export default function LoginForm() {
     initialValues: {
       email: '',
       password: '',
-      remember: true,
       auth: false
     },
     mapPropsToTouched: {auth: false},
@@ -110,6 +109,8 @@ export default function LoginForm() {
           />
         </Stack>
 
+        {/*
+        TODO: Implement functionality for the following
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
@@ -119,9 +120,9 @@ export default function LoginForm() {
           <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
             Forgot password?
           </Link>
-        </Stack>
+        </Stack> */}
         
-        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', mt: '0px', mb: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
+        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', mt: '24px', mb: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
         </FormHelperText>
         
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
