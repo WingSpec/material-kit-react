@@ -8,7 +8,6 @@ import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';
 
 // layouts
-import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import DashboardLayout from './layouts/dashboard';
 
 
@@ -40,12 +39,10 @@ export default function App() {
             <Route path='blog' element={<BlogPage />} />
           </Route>
           {/* TODO: Implement AuthContext */}
-          <Route path='/' element={<LogoOnlyLayout/>}>
-            <Route path='/' element={<Navigate to='/login' />}/>
-            <Route path='login' element={<LoginPage />} />
-            <Route path='register' element={<RegisterPage />} />
-            <Route path='404' element={<NotFoundPage />} />
-          </Route>
+          <Route path='/' element={<Navigate to='/login' />}/>
+          <Route path='login' element={<LoginPage />} />
+          <Route path='register' element={<RegisterPage />} />
+          <Route path='404' element={<NotFoundPage />} />
           <Route path='*' element={<Navigate to='/404' replace />} />
         </Routes>
       </Suspense>
