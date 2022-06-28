@@ -11,7 +11,7 @@ import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
 
-const ProductImgStyle = styled('img')({
+const ProjectImgStyle = styled('img')({
   top: 0,
   width: '100%',
   height: '100%',
@@ -21,20 +21,20 @@ const ProductImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-ShopProductCard.propTypes = {
-  product: PropTypes.object,
+ProjectCard.propTypes = {
+  project: PropTypes.object,
 };
 
-export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+export default function ProjectCard({ project }) {
+  const { id, postal, address, profile, createdAt, user, buildingStatus, repairStatus, lastInspected, owner, buildingType, constructionYear, structureMaterial, professionalEngineer, facadePlan, heightAdjustment } = project;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {buildingStatus && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color={(buildingStatus === 'New' && 'error') || (buildingStatus === 'Ongoing' && 'info') || 'success'}
             sx={{
               zIndex: 9,
               top: 16,
@@ -43,34 +43,22 @@ export default function ShopProductCard({ product }) {
               textTransform: 'uppercase',
             }}
           >
-            {status}
+            {buildingStatus}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProjectImgStyle alt={address} src={profile} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link to="#" color="inherit" underline="hover" component={RouterLink}>
           <Typography variant="subtitle2" noWrap>
-            {name}
+            {address}
           </Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
           <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
-            &nbsp;
-            {fCurrency(price)}
+            {postal}
           </Typography>
         </Stack>
       </Stack>
