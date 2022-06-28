@@ -21,7 +21,7 @@ export default function LoginForm() {
   });
 
   async function handleLogin(values) {
-    const uriLogin = 'https://www.wingspect.net/api/account/login';
+    const uriLogin = `${process.env.REACT_APP_API_ENDPOINT}/account/login`;
     
     const formdata = new FormData();
     formdata.append('username', values.email);
@@ -45,7 +45,7 @@ export default function LoginForm() {
       }
     );
     
-    return data.response;    
+    return data;    
   }
 
   const formik = useFormik({
@@ -58,12 +58,14 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
       const result = await handleLogin(values);
-      console.log(result);
-      if (result === 'Error') {
+      console.log(result.response);
+      if (result.response === 'Error') {
         errors.auth = true;
       }
       else {
         values.auth = true; // unused for now
+        sessionStorage.Token = result.token;
+        sessionStorage.UserEmail = result.email;
         navigate('/dashboard/app', { replace: true });
       }
     }
