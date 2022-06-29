@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, createContext, useReducer } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 // theme
 import ThemeProvider from './theme';
@@ -19,32 +19,86 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const DashboardAppPage = lazy(() => import('./pages/DashboardAppPage'));
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
-// import InspectionPage
-// import ReportPage(s?)
+// TODO: import InspectionPage
+// TODO: import ReportPage(s?)
 
 // ----------------------------------------------------------------------
 
+const initialState = {
+  isLoggedIn: JSON.parse(sessionStorage.getItem('isLoggedIn')) || false,
+  user: JSON.parse(sessionStorage.getItem('user')) || null
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN':
+      sessionStorage.setItem('isLoggedIn', JSON.stringify(action.payload.isLoggedIn));
+      sessionStorage.setItem('user', JSON.stringify(action.payload.user));
+      return {
+        ...state,
+        isLoggedIn: action.payload.isLoggedIn,
+        user: action.payload.user
+      };
+    case 'LOGOUT':
+      sessionStorage.clear();
+      return {
+        ...state,
+        isLoggedIn: false,
+        user: null
+      };
+    default:
+      return state;
+  }
+};
+
+// conditional routing following
+// https://surajsharma.net/blog/react-conditional-routing
+export const AuthContext = createContext();
+
+function PrivateRoute() {
+  return (
+    <Routes>
+      <Route path='/dashboard' element={<DashboardLayout />}>
+        <Route path='app' element={<DashboardAppPage />} />
+        <Route path='user' element={<UserPage />} />
+        <Route path='projects' element={<ProjectsPage />} />
+        <Route path='blog' element={<BlogPage />} />
+      </Route>
+      <Route path='/' element={<Navigate to='/dashboard/app' />} />
+      <Route path='login' element={<LoginPage />} />
+      <Route path='register' element={<RegisterPage />} />
+      <Route path='404' element={<NotFoundPage />} />
+      <Route path='*' element={<Navigate to='/404' replace />} />
+    </Routes>
+  );
+};
+
+function PublicRoute() {
+  return (
+    <Routes>
+      <Route path='/' element={<Navigate to='/login' />} />
+      <Route path='login' element={<LoginPage />} />
+      <Route path='register' element={<RegisterPage />} />
+      <Route path='*' element={<Navigate to='/login' replace />} />
+    </Routes>
+  );
+};
+
 export default function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <ThemeProvider>
       <ScrollToTop />
       <BaseOptionChartStyle />
       {/* TODO: make loading prettier */}
       <Suspense fallback={<h1>Loading...</h1>}>
-        <Routes>
-          <Route path='/dashboard' element={<DashboardLayout />}>
-            <Route path='app' element={<DashboardAppPage />} />
-            <Route path='user' element={<UserPage />} />
-            <Route path='projects' element={<ProjectsPage />} />
-            <Route path='blog' element={<BlogPage />} />
-          </Route>
-          {/* TODO: Implement AuthContext */}
-          <Route path='/' element={<Navigate to='/login' />}/>
-          <Route path='login' element={<LoginPage />} />
-          <Route path='register' element={<RegisterPage />} />
-          <Route path='404' element={<NotFoundPage />} />
-          <Route path='*' element={<Navigate to='/404' replace />} />
-        </Routes>
+        <AuthContext.Provider value={{ state, dispatch }}>
+          {
+            state.isLoggedIn
+              ? <PrivateRoute />
+              : <PublicRoute />
+          }
+        </AuthContext.Provider>
       </Suspense>
     </ThemeProvider>
   );

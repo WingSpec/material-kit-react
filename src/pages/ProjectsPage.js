@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
@@ -6,10 +6,14 @@ import Page from '../components/Page';
 import { ProjectSort, ProjectList, ProjectCartWidget, ProjectFilterSidebar } from '../sections/@dashboard/projects';
 // mock
 import PROJECTS from '../_mock/projects';
+// context
+import { AuthContext } from '../App';
 
 // ----------------------------------------------------------------------
 
 export default function ProjectsPage() {
+  const { state, dispatch } = useContext(AuthContext);
+
   const [openFilter, setOpenFilter] = useState(false);
 
   const handleOpenFilter = () => {
@@ -21,15 +25,29 @@ export default function ProjectsPage() {
   };
 
   // TODO: connect to backend
-  // async function getProjects() {
-  //   const config = {
-  //     method: 'GET',
-  //     url: process.env.REACT_APP_API_ENDPOINT + '/buildings',
-  //     data: new FormData()
-  //   };
+  async function getProjects() {
+    const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings`
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${state.user.token}`
+      }
+    };
+
+    const fetchResponse = await fetch(uriBuildings, requestOptions)
+      .catch(error => {
+        console.error(`Fetch response is:- ${error}`);
+      }
+    );
     
-  //   let projects = [];
-  // }
+    const data = await fetchResponse.json()
+      .catch(error => {
+        console.error(`Fetch data Error is:- ${error}`);
+      }
+    );
+    
+    return data;
+  }
 
   return (
     <Page title="Dashboard: Projects">
@@ -49,7 +67,7 @@ export default function ProjectsPage() {
           </Stack>
         </Stack>
 
-        <ProjectList projects={JSON.parse(JSON.stringify(PROJECTS))} />
+        <ProjectList projects={PROJECTS} />
         <ProjectCartWidget />
       </Container>
     </Page>
