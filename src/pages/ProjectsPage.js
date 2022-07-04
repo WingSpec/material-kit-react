@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { Container, Stack, Typography, LinearProgress } from '@mui/material';
 // components
 import Page from '../components/Page';
-import { ProjectSort, ProjectList, ProjectCartWidget, ProjectFilterSidebar } from '../sections/@dashboard/projects';
+import { ProjectSort, ProjectList } from '../sections/@dashboard/projects';
 // context
 import { AuthContext } from '../App';
 
@@ -13,7 +13,7 @@ export default function ProjectsPage() {
   const { state, dispatch } = useContext(AuthContext);
 
   const [openFilter, setOpenFilter] = useState(false);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(JSON.parse(sessionStorage.getItem('projects')));
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -32,6 +32,10 @@ export default function ProjectsPage() {
 
   // TODO: connect to backend
   async function getProjects() {
+    if (projects) {
+      setIsLoaded(true);
+      return;
+    }
     const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings/`
     const requestOptions = {
       method: 'GET',
@@ -44,6 +48,7 @@ export default function ProjectsPage() {
     const data = await fetchResponse.json();
     
     setProjects(data);
+    sessionStorage.setItem('projects', JSON.stringify(data));
     setIsLoaded(true);
   }
   console.log(isLoaded);
@@ -56,11 +61,6 @@ export default function ProjectsPage() {
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProjectFilterSidebar
-              isOpenFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
             <ProjectSort />
           </Stack>
         </Stack>
@@ -69,8 +69,6 @@ export default function ProjectsPage() {
           ? <ProjectList projects={projects} />
           : <LinearProgress />
         }
-        
-        <ProjectCartWidget />
       </Container>
     </Page>
   );

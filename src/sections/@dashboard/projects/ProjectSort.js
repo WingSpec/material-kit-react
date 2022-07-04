@@ -6,14 +6,16 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
+// TODO: implement sort options
+
 const SORT_BY_OPTIONS = [
-  { value: 'featured', label: 'Featured' },
+  { value: 'alphaAsc', label: 'Alphabetical (A-Z)' },
   { value: 'newest', label: 'Newest' },
-  { value: 'priceDesc', label: 'Price: High-Low' },
-  { value: 'priceAsc', label: 'Price: Low-High' }
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'completion', label: 'Completion' }
 ];
 
-export default function ShopProjectSort() {
+export default function ProjectSort() {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {

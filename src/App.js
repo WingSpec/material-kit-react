@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, createContext, useReducer } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { Backdrop, CircularProgress } from '@mui/material';
 // theme
 import ThemeProvider from './theme';
 // scroll to top on load
@@ -91,7 +92,7 @@ export default function App() {
       <ScrollToTop />
       <BaseOptionChartStyle />
       {/* TODO: make loading prettier */}
-      <Suspense fallback={<h1>Loading...</h1>}>
+      <Suspense fallback={<Backdrop open><CircularProgress /></Backdrop>}>
         <AuthContext.Provider value={{ state, dispatch }}>
           {
             state.isLoggedIn
