@@ -35,17 +35,8 @@ export default function LoginForm() {
       body: formdata
     };
 
-    const fetchResponse = await fetch(uriLogin, requestOptions)
-      .catch(error => {
-        console.error(`Fetch response is:- ${error}`);
-      }
-    );
-    
-    const data = await fetchResponse.json()
-      .catch(error => {
-        console.error(`Fetch data Error is:- ${error}`);
-      }
-    );
+    const fetchResponse = await fetch(uriLogin, requestOptions);
+    const data = await fetchResponse.json();
     
     return data;    
   }

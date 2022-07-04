@@ -1,11 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, LinearProgress } from '@mui/material';
 // components
 import Page from '../components/Page';
 import { ProjectSort, ProjectList, ProjectCartWidget, ProjectFilterSidebar } from '../sections/@dashboard/projects';
-// mock
-import PROJECTS from '../_mock/projects';
 // context
 import { AuthContext } from '../App';
 
@@ -15,6 +13,14 @@ export default function ProjectsPage() {
   const { state, dispatch } = useContext(AuthContext);
 
   const [openFilter, setOpenFilter] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!isLoaded && state.isLoggedIn) {
+      getProjects();
+    }
+  });
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -26,7 +32,7 @@ export default function ProjectsPage() {
 
   // TODO: connect to backend
   async function getProjects() {
-    const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings`
+    const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings/`
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -34,21 +40,13 @@ export default function ProjectsPage() {
       }
     };
 
-    const fetchResponse = await fetch(uriBuildings, requestOptions)
-      .catch(error => {
-        console.error(`Fetch response is:- ${error}`);
-      }
-    );
+    const fetchResponse = await fetch(uriBuildings, requestOptions);
+    const data = await fetchResponse.json();
     
-    const data = await fetchResponse.json()
-      .catch(error => {
-        console.error(`Fetch data Error is:- ${error}`);
-      }
-    );
-    
-    return data;
+    setProjects(data);
+    setIsLoaded(true);
   }
-
+  console.log(isLoaded);
   return (
     <Page title="Dashboard: Projects">
       <Container>
@@ -67,7 +65,11 @@ export default function ProjectsPage() {
           </Stack>
         </Stack>
 
-        <ProjectList projects={PROJECTS} />
+        { isLoaded
+          ? <ProjectList projects={projects} />
+          : <LinearProgress />
+        }
+        
         <ProjectCartWidget />
       </Container>
     </Page>
