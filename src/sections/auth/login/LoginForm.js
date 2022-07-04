@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
@@ -7,10 +7,13 @@ import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormContr
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { AuthContext } from '../../../App';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
+  const { state, dispatch } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -29,21 +32,11 @@ export default function LoginForm() {
 
     const requestOptions = {
       method: 'POST',
-      body: formdata,
-      redirect: 'follow'
+      body: formdata
     };
 
-    const fetchResponse = await fetch(uriLogin, requestOptions)
-      .catch(error => {
-        console.error(`Fetch response is:- ${error}`);
-      }
-    );
-    
-    const data = await fetchResponse.json()
-      .catch(error => {
-        console.error(`Fetch data Error is:- ${error}`);
-      }
-    );
+    const fetchResponse = await fetch(uriLogin, requestOptions);
+    const data = await fetchResponse.json();
     
     return data;    
   }
@@ -52,6 +45,7 @@ export default function LoginForm() {
     initialValues: {
       email: '',
       password: '',
+      remember: true,
       auth: false
     },
     mapPropsToTouched: {auth: false},
@@ -64,8 +58,10 @@ export default function LoginForm() {
       }
       else {
         values.auth = true; // unused for now
-        sessionStorage.Token = result.token;
-        sessionStorage.UserEmail = result.email;
+        dispatch({
+          type: 'LOGIN',
+          payload: { user: { email: result.email, token: result.token }, isLoggedIn: true }
+        });
         navigate('/dashboard/app', { replace: true });
       }
     }
