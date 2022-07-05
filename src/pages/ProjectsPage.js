@@ -16,17 +16,14 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState(JSON.parse(sessionStorage.getItem('projects')));
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState('All');
-  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState(JSON.parse(sessionStorage.getItem('projects')));
 
-  // on page load, load and filter projects
-  useEffect(() => {
-    if (!isLoaded && state.isLoggedIn) {
-      getProjects();
-      filterProjects();
-    }
-  });
+  // on page load, call getProjects
+  useEffect(getProjects, []);
 
-  useEffect(filterProjects, [filter]);
+  // whenever the value of filter changes, call filterProjects
+  // also set projects as a dependency so that filterProjects is called when projects are initially loaded
+  useEffect(filterProjects, [filter, projects]);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
