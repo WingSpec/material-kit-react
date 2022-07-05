@@ -6,6 +6,8 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
+// TODO: Implement ProjectSort
+
 const SORT_BY_OPTIONS = [
   { value: 'featured', label: 'Featured' },
   { value: 'newest', label: 'Newest' },
@@ -13,7 +15,7 @@ const SORT_BY_OPTIONS = [
   { value: 'priceAsc', label: 'Price: Low-High' }
 ];
 
-export default function ShopProjectSort() {
+export default function ProjectSort() {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
