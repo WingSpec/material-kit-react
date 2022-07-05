@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { Container, Stack, Typography, LinearProgress } from '@mui/material';
 // components
 import Page from '../components/Page';
-import { ProjectSort, ProjectList } from '../sections/@dashboard/projects';
+import { ProjectSort, ProjectList, ProjectFilterSidebar } from '../sections/@dashboard/projects';
 // context
 import { AuthContext } from '../App';
 
@@ -15,12 +15,18 @@ export default function ProjectsPage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [projects, setProjects] = useState(JSON.parse(sessionStorage.getItem('projects')));
   const [isLoaded, setIsLoaded] = useState(false);
+  const [filter, setFilter] = useState('All');
+  const [filteredProjects, setFilteredProjects] = useState([]);
 
+  // on page load, load and filter projects
   useEffect(() => {
     if (!isLoaded && state.isLoggedIn) {
       getProjects();
+      filterProjects();
     }
   });
+
+  useEffect(filterProjects, [filter]);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -30,7 +36,23 @@ export default function ProjectsPage() {
     setOpenFilter(false);
   };
 
-  // TODO: connect to backend
+  // callback function sent to ProjectFilterSidebar
+  // sets value of filter based on value selected
+  const handleChangeFilter = (event) => {
+    setFilter(event.target.value);
+  }
+
+  // set filteredProjects based on value of filter
+  function filterProjects() {
+    if (filter === 'All') {
+      setFilteredProjects(projects);
+    }
+    else {
+      setFilteredProjects(projects.filter(project => project.buildingStatus === filter));
+    }
+  }
+
+  // get projects from API backend
   async function getProjects() {
     if (projects) {
       setIsLoaded(true);
@@ -51,7 +73,7 @@ export default function ProjectsPage() {
     sessionStorage.setItem('projects', JSON.stringify(data));
     setIsLoaded(true);
   }
-  console.log(isLoaded);
+
   return (
     <Page title="Dashboard: Projects">
       <Container>
@@ -61,12 +83,18 @@ export default function ProjectsPage() {
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+            <ProjectFilterSidebar
+              isOpenFilter={openFilter}
+              onOpenFilter={handleOpenFilter}
+              onCloseFilter={handleCloseFilter}
+              onChangeFilter={handleChangeFilter}
+            />
             <ProjectSort />
           </Stack>
         </Stack>
 
         { isLoaded
-          ? <ProjectList projects={projects} />
+          ? <ProjectList projects={filteredProjects} />
           : <LinearProgress />
         }
       </Container>

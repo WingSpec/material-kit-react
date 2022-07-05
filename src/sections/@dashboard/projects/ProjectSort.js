@@ -6,13 +6,13 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-// TODO: implement sort options
+// TODO: Implement ProjectSort
 
 const SORT_BY_OPTIONS = [
-  { value: 'alphaAsc', label: 'Alphabetical (A-Z)' },
+  { value: 'featured', label: 'Featured' },
   { value: 'newest', label: 'Newest' },
-  { value: 'oldest', label: 'Oldest' },
-  { value: 'completion', label: 'Completion' }
+  { value: 'priceDesc', label: 'Price: High-Low' },
+  { value: 'priceAsc', label: 'Price: Low-High' }
 ];
 
 export default function ProjectSort() {
