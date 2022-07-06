@@ -6,7 +6,7 @@ import ProjectCard from './ProjectCard';
 // ----------------------------------------------------------------------
 
 ProjectList.propTypes = {
-  projects: PropTypes.array.isRequired
+  projects: PropTypes.array.isRequired,
 };
 
 export default function ProjectList({ projects, ...other }) {
