@@ -60,7 +60,8 @@ function PrivateRoute() {
     <Routes>
       <Route path="/" element={<Navigate to="/projects/all" />} />
       <Route path="/" element={<DashboardLayout />}>
-        <Route exact path="projects/all" element={<ProjectsPage />} />
+        <Route path="projects" element={<Navigate to="/projects/all" />} />
+        <Route path="projects/all" element={<ProjectsPage />} />
         <Route path="projects/:projectId" element={<DashboardAppPage />} />
         <Route path="user" element={<UserPage />} />
       </Route>

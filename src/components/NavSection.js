@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
+import { NavLink as RouterLink, matchPath, useLocation, useNavigate } from 'react-router-dom';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
@@ -35,6 +35,8 @@ NavItem.propTypes = {
 };
 
 function NavItem({ item, active }) {
+  const navigate = useNavigate();
+
   const theme = useTheme();
 
   const isActiveRoot = active(item.path);
@@ -44,6 +46,9 @@ function NavItem({ item, active }) {
   const [open, setOpen] = useState(isActiveRoot);
 
   const handleOpen = () => {
+    if (!isActiveRoot) {
+      navigate(item.path, { replace: true });
+    }
     setOpen((prev) => !prev);
   };
 
@@ -139,13 +144,13 @@ NavSection.propTypes = {
   navConfig: PropTypes.array,
 };
 
-export default function NavSection({ navConfig, ...other }) {
+export default function NavSection({ navConfig, ...props }) {
   const { pathname } = useLocation();
 
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
 
   return (
-    <Box {...other}>
+    <Box {...props}>
       <List disablePadding sx={{ p: 1 }}>
         {navConfig.map((item) => (
           <NavItem key={item.title} item={item} active={match} />
