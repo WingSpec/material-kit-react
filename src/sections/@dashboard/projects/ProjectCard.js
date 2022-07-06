@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 // some API data identifiers are in camelcase
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Typography, Stack, CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
@@ -48,37 +48,37 @@ export default function ProjectCard({ project }) {
 
   return (
     <Card>
-      <Box sx={{ pt: '100%', position: 'relative' }}>
-        {buildingStatus && (
-          <Label
-            variant="filled"
-            color={(buildingStatus === 'New' && 'error') || (buildingStatus === 'Ongoing' && 'info') || 'success'}
-            sx={{
-              zIndex: 9,
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase',
-            }}
-          >
-            {buildingStatus}
-          </Label>
-        )}
-        <ProjectImgStyle alt={address} src={profile} />
-      </Box>
+      <CardActionArea component={Link} to={`/projects/${id}`}>
+        <Box sx={{ pt: '100%', position: 'relative' }}>
+          {buildingStatus && (
+            <Label
+              variant="filled"
+              color={(buildingStatus === 'New' && 'error') || (buildingStatus === 'Ongoing' && 'info') || 'success'}
+              sx={{
+                zIndex: 9,
+                top: 16,
+                right: 16,
+                position: 'absolute',
+                textTransform: 'uppercase',
+              }}
+            >
+              {buildingStatus}
+            </Label>
+          )}
+          <ProjectImgStyle alt={address} src={profile} />
+        </Box>
 
-      <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+        <Stack spacing={2} sx={{ p: 3 }}>
           <Typography variant="subtitle1">{address}</Typography>
-        </Link>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle2" noWrap title={last_inspected}>
-            {last_inspected}
-          </Typography>
-          <Typography variant="subtitle2">{postal}</Typography>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="subtitle2" noWrap title={last_inspected}>
+              {last_inspected}
+            </Typography>
+            <Typography variant="subtitle2">{postal}</Typography>
+          </Stack>
         </Stack>
-      </Stack>
+      </CardActionArea>
     </Card>
   );
 }

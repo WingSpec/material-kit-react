@@ -19,12 +19,10 @@ const navConfig = [
         path: '/projects/all',
       },
     ].concat(
-      projects.map((project) => {
-        return {
-          title: project.address,
-          path: `/projects/${project.id}`,
-        };
-      })
+      projects.map((project) => ({
+        title: project.address,
+        path: `/projects/${project.id}`,
+      }))
     ),
   },
   {
