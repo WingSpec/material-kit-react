@@ -23,12 +23,13 @@ const FILTER_CATEGORY_OPTIONS = ['All', 'New', 'Ongoing', 'Completed'];
 
 FilterSidebar.propTypes = {
   isOpenFilter: PropTypes.bool,
+  defaultValue: PropTypes.string,
   onOpenFilter: PropTypes.func,
   onCloseFilter: PropTypes.func,
   onChangeFilter: PropTypes.func,
 };
 
-export default function FilterSidebar({ isOpenFilter, onOpenFilter, onCloseFilter, onChangeFilter }) {
+export default function FilterSidebar({ isOpenFilter, defaultValue, onOpenFilter, onCloseFilter, onChangeFilter }) {
   return (
     <>
       <Button disableRipple color="inherit" endIcon={<Iconify icon="ic:round-filter-list" />} onClick={onOpenFilter}>
@@ -60,7 +61,7 @@ export default function FilterSidebar({ isOpenFilter, onOpenFilter, onCloseFilte
               <Typography variant="subtitle1" gutterBottom>
                 Category
               </Typography>
-              <RadioGroup defaultValue="All" onChange={onChangeFilter}>
+              <RadioGroup defaultValue={defaultValue} onChange={onChangeFilter}>
                 {FILTER_CATEGORY_OPTIONS.map((item) => (
                   <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
                 ))}

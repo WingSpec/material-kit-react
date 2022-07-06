@@ -58,9 +58,10 @@ export const AuthContext = createContext();
 function PrivateRoute() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/projects" />} />
+      <Route path="/" element={<Navigate to="/projects/all" />} />
       <Route path="/" element={<DashboardLayout />}>
-        <Route path="projects" element={<ProjectsPage />} />
+        <Route exact path="projects/all" element={<ProjectsPage />} />
+        <Route path="projects/:projectId" element={<DashboardAppPage />} />
         <Route path="user" element={<UserPage />} />
       </Route>
       <Route path="login" element={<LoginPage />} />

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+// some API data identifiers are in camelcase
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -30,17 +32,17 @@ export default function ProjectCard({ project }) {
     postal,
     address,
     profile,
-    createdAt,
+    created_at,
     user,
     buildingStatus,
     repairStatus,
-    lastInspected,
+    last_inspected,
     owner,
     buildingType,
     constructionYear,
     structureMaterial,
     professionalEngineer,
-    facadePlan,
+    facade_plan,
     heightAdjustment,
   } = project;
 
@@ -67,13 +69,14 @@ export default function ProjectCard({ project }) {
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link to="#" color="inherit" underline="hover" component={RouterLink}>
-          <Typography variant="subtitle2" noWrap>
-            {address}
-          </Typography>
+          <Typography variant="subtitle1">{address}</Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">{postal}</Typography>
+          <Typography variant="subtitle2" noWrap title={last_inspected}>
+            {last_inspected}
+          </Typography>
+          <Typography variant="subtitle2">{postal}</Typography>
         </Stack>
       </Stack>
     </Card>

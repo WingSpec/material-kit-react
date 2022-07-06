@@ -19,7 +19,7 @@ export default function ProjectsPage() {
   const [filteredProjects, setFilteredProjects] = useState(JSON.parse(sessionStorage.getItem('projects')));
 
   // on page load, call getProjects
-  useEffect(getProjects, []);
+  useEffect(() => getProjects(), []);
 
   // whenever the value of filter changes, call filterProjects
   // also set projects as a dependency so that filterProjects is called when projects are initially loaded
@@ -81,6 +81,7 @@ export default function ProjectsPage() {
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProjectFilterSidebar
               isOpenFilter={openFilter}
+              defaultValue={filter}
               onOpenFilter={handleOpenFilter}
               onCloseFilter={handleCloseFilter}
               onChangeFilter={handleChangeFilter}
