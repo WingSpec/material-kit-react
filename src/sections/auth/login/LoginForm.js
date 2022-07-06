@@ -3,7 +3,16 @@ import { useState, useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel, FormHelperText } from '@mui/material';
+import {
+  Link,
+  Stack,
+  Checkbox,
+  TextField,
+  IconButton,
+  InputAdornment,
+  FormControlLabel,
+  FormHelperText,
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -25,20 +34,20 @@ export default function LoginForm() {
 
   async function handleLogin(values) {
     const uriLogin = `${process.env.REACT_APP_API_ENDPOINT}/account/login`;
-    
+
     const formdata = new FormData();
     formdata.append('username', values.email);
     formdata.append('password', values.password);
 
     const requestOptions = {
       method: 'POST',
-      body: formdata
+      body: formdata,
     };
 
     const fetchResponse = await fetch(uriLogin, requestOptions);
     const data = await fetchResponse.json();
-    
-    return data;    
+
+    return data;
   }
 
   const formik = useFormik({
@@ -46,25 +55,27 @@ export default function LoginForm() {
       email: '',
       password: '',
       remember: true,
-      auth: false
+      auth: false,
     },
-    mapPropsToTouched: {auth: false},
+    mapPropsToTouched: { auth: false },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
       const result = await handleLogin(values);
       console.log(result.response);
       if (result.response === 'Error') {
         errors.auth = true;
-      }
-      else {
+      } else {
         values.auth = true; // unused for now
         dispatch({
           type: 'LOGIN',
-          payload: { user: { email: result.email, token: result.token }, isLoggedIn: true }
+          payload: {
+            user: { email: result.email, token: result.token },
+            isLoggedIn: true,
+          },
         });
         navigate('/dashboard/app', { replace: true });
       }
-    }
+    },
   });
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -83,7 +94,7 @@ export default function LoginForm() {
             type="email"
             label="Email address"
             {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email || errors.auth)}
+            error={Boolean((touched.email && errors.email) || errors.auth)}
             helperText={touched.email && errors.email}
           />
 
@@ -102,7 +113,7 @@ export default function LoginForm() {
                 </InputAdornment>
               ),
             }}
-            error={Boolean(touched.password && errors.password || errors.auth)}
+            error={Boolean((touched.password && errors.password) || errors.auth)}
             helperText={touched.password && errors.password}
           />
         </Stack>
@@ -119,10 +130,11 @@ export default function LoginForm() {
             Forgot password?
           </Link>
         </Stack> */}
-        
-        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', mt: '24px', mb: '3px', mx: '14px' }}> {errors.auth && 'Username or password is incorrect'}
+
+        <FormHelperText error={Boolean(errors.auth)} sx={{ lineHeight: '18px', mt: '24px', mb: '3px', mx: '14px' }}>
+          {errors.auth && 'Username or password is incorrect'}
         </FormHelperText>
-        
+
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Login
         </LoadingButton>

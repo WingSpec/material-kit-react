@@ -25,7 +25,7 @@ FilterSidebar.propTypes = {
   isOpenFilter: PropTypes.bool,
   onOpenFilter: PropTypes.func,
   onCloseFilter: PropTypes.func,
-  onChangeFilter: PropTypes.func
+  onChangeFilter: PropTypes.func,
 };
 
 export default function FilterSidebar({ isOpenFilter, onOpenFilter, onCloseFilter, onChangeFilter }) {

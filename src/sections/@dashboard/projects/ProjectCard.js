@@ -25,7 +25,24 @@ ProjectCard.propTypes = {
 };
 
 export default function ProjectCard({ project }) {
-  const { id, postal, address, profile, createdAt, user, buildingStatus, repairStatus, lastInspected, owner, buildingType, constructionYear, structureMaterial, professionalEngineer, facadePlan, heightAdjustment } = project;
+  const {
+    id,
+    postal,
+    address,
+    profile,
+    createdAt,
+    user,
+    buildingStatus,
+    repairStatus,
+    lastInspected,
+    owner,
+    buildingType,
+    constructionYear,
+    structureMaterial,
+    professionalEngineer,
+    facadePlan,
+    heightAdjustment,
+  } = project;
 
   return (
     <Card>
@@ -56,9 +73,7 @@ export default function ProjectCard({ project }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">
-            {postal}
-          </Typography>
+          <Typography variant="subtitle1">{postal}</Typography>
         </Stack>
       </Stack>
     </Card>

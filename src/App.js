@@ -11,9 +11,8 @@ import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 
-
 // pages (using route-based code-splitting: https://reactjs.org/docs/code-splitting.html#route-based-code-splitting)
-const BlogPage = lazy(() => import('./pages/BlogPage'))
+const BlogPage = lazy(() => import('./pages/BlogPage'));
 const UserPage = lazy(() => import('./pages/UserPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
@@ -27,7 +26,7 @@ const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 
 const initialState = {
   isLoggedIn: JSON.parse(sessionStorage.getItem('isLoggedIn')) || false,
-  user: JSON.parse(sessionStorage.getItem('user')) || null
+  user: JSON.parse(sessionStorage.getItem('user')) || null,
 };
 
 const reducer = (state, action) => {
@@ -38,14 +37,14 @@ const reducer = (state, action) => {
       return {
         ...state,
         isLoggedIn: action.payload.isLoggedIn,
-        user: action.payload.user
+        user: action.payload.user,
       };
     case 'LOGOUT':
       sessionStorage.clear();
       return {
         ...state,
         isLoggedIn: false,
-        user: null
+        user: null,
       };
     default:
       return state;
@@ -59,31 +58,31 @@ export const AuthContext = createContext();
 function PrivateRoute() {
   return (
     <Routes>
-      <Route path='/dashboard' element={<DashboardLayout />}>
-        <Route path='app' element={<DashboardAppPage />} />
-        <Route path='user' element={<UserPage />} />
-        <Route path='projects' element={<ProjectsPage />} />
-        <Route path='blog' element={<BlogPage />} />
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="app" element={<DashboardAppPage />} />
+        <Route path="user" element={<UserPage />} />
+        <Route path="projects" element={<ProjectsPage />} />
+        <Route path="blog" element={<BlogPage />} />
       </Route>
-      <Route path='/' element={<Navigate to='/dashboard/app' />} />
-      <Route path='login' element={<LoginPage />} />
-      <Route path='register' element={<RegisterPage />} />
-      <Route path='404' element={<NotFoundPage />} />
-      <Route path='*' element={<Navigate to='/404' replace />} />
+      <Route path="/" element={<Navigate to="/dashboard/app" />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
+      <Route path="404" element={<NotFoundPage />} />
+      <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );
-};
+}
 
 function PublicRoute() {
   return (
     <Routes>
-      <Route path='/' element={<Navigate to='/login' />} />
-      <Route path='login' element={<LoginPage />} />
-      <Route path='register' element={<RegisterPage />} />
-      <Route path='*' element={<Navigate to='/login' replace />} />
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
-};
+}
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -92,13 +91,15 @@ export default function App() {
       <ScrollToTop />
       <BaseOptionChartStyle />
       {/* TODO: make loading prettier */}
-      <Suspense fallback={<Backdrop open><CircularProgress /></Backdrop>}>
+      <Suspense
+        fallback={
+          <Backdrop open>
+            <CircularProgress />
+          </Backdrop>
+        }
+      >
         <AuthContext.Provider value={{ state, dispatch }}>
-          {
-            state.isLoggedIn
-              ? <PrivateRoute />
-              : <PublicRoute />
-          }
+          {state.isLoggedIn ? <PrivateRoute /> : <PublicRoute />}
         </AuthContext.Provider>
       </Suspense>
     </ThemeProvider>

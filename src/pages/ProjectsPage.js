@@ -37,15 +37,14 @@ export default function ProjectsPage() {
   // sets value of filter based on value selected
   const handleChangeFilter = (event) => {
     setFilter(event.target.value);
-  }
+  };
 
   // set filteredProjects based on value of filter
   function filterProjects() {
     if (filter === 'All') {
       setFilteredProjects(projects);
-    }
-    else {
-      setFilteredProjects(projects.filter(project => project.buildingStatus === filter));
+    } else {
+      setFilteredProjects(projects.filter((project) => project.buildingStatus === filter));
     }
   }
 
@@ -55,17 +54,17 @@ export default function ProjectsPage() {
       setIsLoaded(true);
       return;
     }
-    const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings/`
+    const uriBuildings = `${process.env.REACT_APP_API_ENDPOINT}/buildings/`;
     const requestOptions = {
       method: 'GET',
       headers: {
-        'Authorization': `Token ${state.user.token}`
-      }
+        Authorization: `Token ${state.user.token}`,
+      },
     };
 
     const fetchResponse = await fetch(uriBuildings, requestOptions);
     const data = await fetchResponse.json();
-    
+
     setProjects(data);
     sessionStorage.setItem('projects', JSON.stringify(data));
     setIsLoaded(true);
@@ -90,10 +89,7 @@ export default function ProjectsPage() {
           </Stack>
         </Stack>
 
-        { isLoaded
-          ? <ProjectList projects={filteredProjects} />
-          : <LinearProgress />
-        }
+        {isLoaded ? <ProjectList projects={filteredProjects} /> : <LinearProgress />}
       </Container>
     </Page>
   );
