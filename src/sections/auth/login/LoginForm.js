@@ -73,7 +73,7 @@ export default function LoginForm() {
             isLoggedIn: true,
           },
         });
-        navigate('/dashboard/app', { replace: true });
+        navigate('/', { replace: true });
       }
     },
   });

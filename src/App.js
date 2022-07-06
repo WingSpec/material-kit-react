@@ -58,13 +58,11 @@ export const AuthContext = createContext();
 function PrivateRoute() {
   return (
     <Routes>
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        <Route path="app" element={<DashboardAppPage />} />
-        <Route path="user" element={<UserPage />} />
+      <Route path="/" element={<Navigate to="/projects" />} />
+      <Route path="/" element={<DashboardLayout />}>
         <Route path="projects" element={<ProjectsPage />} />
-        <Route path="blog" element={<BlogPage />} />
+        <Route path="user" element={<UserPage />} />
       </Route>
-      <Route path="/" element={<Navigate to="/dashboard/app" />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="register" element={<RegisterPage />} />
       <Route path="404" element={<NotFoundPage />} />
@@ -90,7 +88,6 @@ export default function App() {
     <ThemeProvider>
       <ScrollToTop />
       <BaseOptionChartStyle />
-      {/* TODO: make loading prettier */}
       <Suspense
         fallback={
           <Backdrop open>
