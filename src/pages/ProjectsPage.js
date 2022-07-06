@@ -81,7 +81,7 @@ export default function ProjectsPage() {
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProjectFilterSidebar
               isOpenFilter={openFilter}
-              defaultValue={filter}
+              value={filter}
               onOpenFilter={handleOpenFilter}
               onCloseFilter={handleCloseFilter}
               onChangeFilter={handleChangeFilter}
