@@ -64,6 +64,8 @@ function NavItem({ item, active }) {
   };
 
   if (children) {
+    // if children passes a callback function, call that callback function
+    const newChildren = children.callback ? children.callback() : children;
     return (
       <>
         <ListItemStyle
@@ -83,7 +85,7 @@ function NavItem({ item, active }) {
 
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {children.map((item) => {
+            {newChildren.map((item) => {
               const { title, path } = item;
               const isActiveSub = active(path);
 
